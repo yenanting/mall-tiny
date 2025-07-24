@@ -31,6 +31,7 @@ public class UmsResourceServiceImpl extends ServiceImpl<UmsResourceMapper,UmsRes
     @Override
     public boolean update(Long id, UmsResource umsResource) {
         umsResource.setId(id);
+        umsResource.setCreateTime(new Date());
         boolean success = updateById(umsResource);
         adminCacheService.delResourceListByResource(id);
         return success;

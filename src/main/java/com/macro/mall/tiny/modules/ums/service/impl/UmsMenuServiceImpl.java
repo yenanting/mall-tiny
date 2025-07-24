@@ -31,6 +31,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper,UmsMenu>implem
     /**
      * 修改菜单层级
      */
+    // @greptile
     private void updateLevel(UmsMenu umsMenu) {
         if (umsMenu.getParentId() == 0) {
             //没有父菜单时为一级菜单
@@ -45,6 +46,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper,UmsMenu>implem
             }
         }
     }
+
 
     @Override
     public boolean update(Long id, UmsMenu umsMenu) {
@@ -80,15 +82,17 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper,UmsMenu>implem
     }
 
     /**
-     * 将UmsMenu转化为UmsMenuNode并设置children属性
+     * 将UmsMenu转化为UmsMenuNode并设置children属性。
      */
     private UmsMenuNode covertMenuNode(UmsMenu menu, List<UmsMenu> menuList) {
         UmsMenuNode node = new UmsMenuNode();
+
         BeanUtils.copyProperties(menu, node);
         List<UmsMenuNode> children = menuList.stream()
                 .filter(subMenu -> subMenu.getParentId().equals(menu.getId()))
                 .map(subMenu -> covertMenuNode(subMenu, menuList)).collect(Collectors.toList());
         node.setChildren(children);
+        node.setCreateTime(new Date());
         return node;
     }
 }
